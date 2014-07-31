@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import AniketaSharma.rohit.R;
+import AniketaSharma.insignia.R;
 
 
 public class MainActivity extends Activity {
@@ -57,6 +57,4 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void verifyFile(View view) {
-    }
 }

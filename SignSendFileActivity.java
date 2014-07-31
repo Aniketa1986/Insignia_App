@@ -9,22 +9,18 @@ import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
-import AniketaSharma.rohit.R;
+import AniketaSharma.insignia.R;
 
 
 public class SignSendFileActivity extends Activity {
@@ -41,29 +37,18 @@ public class SignSendFileActivity extends Activity {
 
         findViewById(R.id.button_send).setOnClickListener(new View.OnClickListener() {
             @Override
-           public void onClick(View v) {
+            public void onClick(View v) {
                 Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-                shareIntent.setType("application/image");
-                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Image");
+                //shareIntent.setType("application/image");
+                shareIntent.setType("image/jpeg");
+                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Image by Insignia");
                 Uri uri = Uri.parse("file://" + picturePath);
-                Log.i("Send" + "", String.valueOf(uriData));
+                //Log.i("Send" + "", String.valueOf(uriData));
                 //String new_path = savefile(uri);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 startActivity(Intent.createChooser(shareIntent, "Send via..."));
             }
         });
-
-        /*button_sign.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                if (uriData != null) {
-                    signPicture(30, 30, true);
-                } else {
-                    Toast.makeText(getApplicationContext(),
-                            "Please pick a Picture", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
     }
 
     @Override
@@ -103,23 +88,24 @@ public class SignSendFileActivity extends Activity {
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             uriData = selectedImage;
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Log.i("open" + "", MediaStore.Images.Media.DATA);
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            //Log.i("open" + "", MediaStore.Images.Media.DATA);
 
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            picturePath = cursor.getString(columnIndex);
             Log.i("open", picturePath);
             cursor.close();
             try {
                 ExifInterface exif = new ExifInterface(picturePath);
-                Log.d("MainActivity", "---Changing the MODEL TAG INITIAL --- " + exif.getAttribute(ExifInterface.TAG_MODEL));
-                TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-                exif.setAttribute(ExifInterface.TAG_MODEL, ""+telephonyManager.getDeviceId());
+                //Log.d("MainActivity", "---Changing the MODEL TAG INITIAL --- " + exif.getAttribute(ExifInterface.TAG_MODEL));
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                //exif.setAttribute(ExifInterface.TAG_MODEL, ""+telephonyManager.getDeviceId());
+                exif.setAttribute(ExifInterface.TAG_MODEL, "1234");
                 exif.saveAttributes();
-                Log.d("SignSendFileActivity", "--- INITIAL VALUE OF MODEL TAG --- " + exif.getAttribute(ExifInterface.TAG_MODEL));
+                //Log.d("SignSendFileActivity", "--- INITIAL VALUE OF MODEL TAG --- " + exif.getAttribute(ExifInterface.TAG_MODEL));
                 Toast.makeText(getApplicationContext(), "Ready to send.", Toast.LENGTH_LONG).show();
 
             } catch (IOException e) {
@@ -134,7 +120,7 @@ public class SignSendFileActivity extends Activity {
             ExifInterface exif2;
             try {
                 exif2 = new ExifInterface(picturePath);
-                Log.d("MainActivity", "--- TAG MODEL --- " + exif2.getAttribute(ExifInterface.TAG_MODEL));
+                //Log.d("MainActivity", "--- TAG MODEL --- " + exif2.getAttribute(ExifInterface.TAG_MODEL));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
